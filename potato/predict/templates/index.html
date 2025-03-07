@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plant Disease Prediction</title>
+    <style>
+body {
+    font-family: 'Poppins', Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+}
+
+.container {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 25px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1);
+    border-left: 5px solid #28a745;
+    border-right: 5px solid #28a745;
+}
+
+h2 {
+    font-size: 22px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+button {
+    padding: 12px 22px;
+    background-color: #28a745;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+}
+
+button:focus {
+    outline: none;
+}
+
+input[type="file"] {
+    display: block;
+    margin: 15px auto;
+    padding: 10px;
+    border: 2px dashed #28a745;
+    border-radius: 8px;
+    background-color: #fff;
+    font-size: 14px;
+    width: 100%;
+}
+
+input[type="file"]::file-selector-button {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.result {
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+}
+
+@media (max-width: 600px) {
+    .container {
+        max-width: 90%;
+        padding: 20px;
+    }
+    
+    button {
+        font-size: 14px;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Upload an Image to Predict Plant Disease</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Predict</button>
+        </form>
+
+        {% if prediction %}
+            <h3>Prediction: {{ prediction }}</h3>
+            <h4>Confidence: {{ confidence|floatformat:2 }}%</h4>
+        {% endif %}
+    </div>
+</body>
+</html>
