@@ -1,24 +1,22 @@
-Potato Leaf Disease Prediction
+**POTATO LEAF DISEASE PREDICTION**
 
-Overview
-
+**OVERVIEW:**
 This project is a web-based application that predicts potato leaf diseases using a Convolutional Neural Network (CNN) model. The backend is built with Django, while the frontend uses HTML, CSS, and JavaScript for a responsive UI.
 
-Features
+**FEATURES:**
 
-Upload an image of a potato leaf.
+-Upload an image of a potato leaf.
 
-Process the image using a trained CNN model.
+-Process the image using a trained CNN model.
 
-Display the prediction result with confidence score.
+-Display the prediction result with a confidence score.
 
-Show the uploaded image alongside the result.
+-Show the uploaded image alongside the result.
 
-Technology Stack
+**TECHNOLOGY STACK:**
 
-Backend: Django (Python), Django REST Framework
+*Backend: Django (Python), Django REST Framework
 
-Machine Learning Model: Convolutional Neural Network (CNN) using TensorFlow/Keras
+*Machine Learning Model: Convolutional Neural Network (CNN) using TensorFlow/Keras
 
-Frontend: HTML, CSS, JavaScript
-
+*Frontend: HTML, CSS, JavaScript
