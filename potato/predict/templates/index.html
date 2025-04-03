@@ -3,102 +3,155 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plant Disease Prediction</title>
+    <title>Potato Leaf Disease Prediction</title>
     <style>
-body {
-    font-family: 'Poppins', Arial, sans-serif;
-    text-align: center;
-    margin: 0;
-    padding: 0;
-    background-color: #f8f9fa;
-}
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+        }
 
-.container {
-    max-width: 500px;
-    margin: 50px auto;
-    padding: 25px;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1);
-    border-left: 5px solid #28a745;
-    border-right: 5px solid #28a745;
-}
+        .navbar {
+            width: 100%;
+            background: #28a745;
+            padding: 15px 0;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
 
-h2 {
-    font-size: 22px;
-    color: #333;
-    margin-bottom: 20px;
-}
+        .container {
+            max-width: 500px;
+            padding: 30px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.2);
+            margin-top: 80px;
+        }
 
-button {
-    padding: 12px 22px;
-    background-color: #28a745;
-    color: white;
-    font-size: 16px;
-    font-weight: 600;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    width: 100%;
-}
+        h2 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+        }
 
-button:focus {
-    outline: none;
-}
+        button {
+            padding: 12px 22px;
+            background-color: #28a745;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
 
-input[type="file"] {
-    display: block;
-    margin: 15px auto;
-    padding: 10px;
-    border: 2px dashed #28a745;
-    border-radius: 8px;
-    background-color: #fff;
-    font-size: 14px;
-    width: 100%;
-}
+        button:hover {
+            background-color: #218838;
+            transform: scale(1.05);
+        }
 
-input[type="file"]::file-selector-button {
-    background: #28a745;
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-}
+        input[type="file"] {
+            display: none;
+        }
 
-.result {
-    margin-top: 20px;
-    font-size: 18px;
-    font-weight: 600;
-    color: #333;
-}
+        .file-label {
+            display: block;
+            background: #28a745;
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            margin: 15px auto;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
 
-@media (max-width: 600px) {
-    .container {
-        max-width: 90%;
-        padding: 20px;
-    }
-    
-    button {
-        font-size: 14px;
-    }
-}
+        .file-label:hover {
+            background: #218838;
+        }
 
+        .image-preview {
+            margin-top: 20px;
+            text-align: center;
+            display: none;
+        }
+
+        .image-preview img {
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            display: none;
+        }
     </style>
 </head>
 <body>
+    <div class="navbar">Potato Leaf Disease Prediction</div>
     <div class="container">
-        <h2>Upload an Image to Predict Plant Disease</h2>
-        <form method="post" enctype="multipart/form-data">
+        <h2>Upload an Image to Predict Potato Leaf Disease</h2>
+        <form method="post" enctype="multipart/form-data" id="upload-form">
             {% csrf_token %}
-            {{ form.as_p }}
+            <label class="file-label" for="file-input">Choose an Image</label>
+            <input type="file" id="file-input" name="image" accept="image/*" required>
+            <div class="image-preview" id="image-preview">
+                <img id="preview-img" src="" alt="Selected Image">
+            </div>
             <button type="submit">Predict</button>
         </form>
 
         {% if prediction %}
-            <h3>Prediction: {{ prediction }}</h3>
-            <h4>Confidence: {{ confidence|floatformat:2 }}%</h4>
+            <div class="result" id="result-section" style="display:block;">
+                <h3>Prediction: {{ prediction }}</h3>
+                <h3>Confidence: {{ confidence|floatformat:2 }}%</h3>
+                <div class="image-preview" id="result-image">
+                    <img id="result-img" src="{{ image_url }}" alt="Uploaded Image">
+                </div>
+            </div>
         {% endif %}
     </div>
+
+    <script>
+        document.getElementById("file-input").addEventListener("change", function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imageUrl = e.target.result;
+                    document.getElementById("preview-img").src = imageUrl;
+                    document.getElementById("image-preview").style.display = "block";
+                    localStorage.setItem("uploadedImage", imageUrl);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        window.addEventListener("load", function() {
+            const storedImage = localStorage.getItem("uploadedImage");
+            if (storedImage) {
+                document.getElementById("preview-img").src = storedImage;
+                document.getElementById("image-preview").style.display = "block";
+            }
+        });
+    </script>
 </body>
 </html>
